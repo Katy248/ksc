@@ -1,0 +1,10 @@
+[Unit]
+Descrition=Radicale - CalDAV server
+
+[Service]
+ExecStart=python -m radicale --storage-filesystem-folder=/var/lib/radicale/collections
+Type=exec
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
