@@ -9,7 +9,12 @@ install: $(INSTALLED_SERVICE_FILE)
 	systemctl daemon-reload
 	systemctl enable --now $(SERVICE)
 	systemctl status $(SERVICE)
-	echo "Look now at http://localhost5232"
+	echo "Look now at http://localhost:5232"
+
+uninstall:
+	systemctl stop $(SERVICE)
+	systemctl disable $(SERVICE)
+	rm -f $(INSTALLED_SERVICE_FILE)
 
 $(INSTALLED_SERVICE_FILE): $(SERVICE_FILE)
 	cp $< $@
