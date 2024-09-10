@@ -12,7 +12,7 @@ execute() {
   fi
 
   if command -v dnf ; then 
-    sudo dnf clean dbcache all
+    sudo dnfo --verbose clean dbcache all
   fi
 }
 
