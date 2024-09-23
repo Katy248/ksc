@@ -1,7 +1,8 @@
 #!/bin/bash
 
 print_help() {
-  echo "Usage rednet.sh <adapter-name>"
+  echo "Usage:"
+  echo "    rednet.sh <adapter-name>"
   exit 0
 }
 
