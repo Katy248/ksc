@@ -9,11 +9,8 @@ print_help() {
 }
 
 print_adapters() {
-  nmcli --fields DEVICE --terse connection show --active
+  nmcli --fields NAME --terse connection show
 }
-
-
-
 
 if [[ $# -lt 1 ]]; then
   echo "Network adapter not specified" >&2
@@ -31,12 +28,12 @@ if [[ $1 == "adapters" ]]; then
   exit 0
 fi
 
-adapter=$1
+connection=$1
 
-echo "Network settings for ${adapter}:"
+echo "Network settings for ${connection}:"
 
-nmcli connection show "${adapter}" | grep -e connection.id -e IP4
+nmcli connection show "${connection}" | grep -e connection.id -e IP4
 
 echo "Hostname: $(hostnamectl hostname)"
 
-echo "MAC: $(cat /sys/class/net/"${adapter}"/address)"
+echo "MAC: $(cat /sys/class/net/"${connection}"/address)"
