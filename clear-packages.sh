@@ -14,6 +14,12 @@ execute() {
   if command -v dnf ; then
     sudo dnf --verbose clean dbcache all
   fi
+
+  if command -v docker ; then
+    sudo docker container prune -f
+    sudo docker image prune -f
+    sudo docker volume prune -f
+  fi
 }
 
 execute
