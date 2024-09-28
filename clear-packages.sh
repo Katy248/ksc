@@ -7,6 +7,10 @@ execute() {
     nix-store --gc
   fi
 
+  if command -v pacman ; then
+    pacman -Qqttd | sudo pacman -Rsu --noconfirm - 
+  fi
+
   if command -v flatpak ; then
     flatpak uninstall --unused -y
   fi
@@ -16,10 +20,10 @@ execute() {
   fi
 
   if command -v docker ; then
-    sudo docker container prune -f
-    sudo docker image     prune -f
-    sudo docker volume    prune -f
-    sudo docker buildx    prune -f
+    sudo docker container prune #-f
+    sudo docker image     prune #-f
+    sudo docker volume    prune #-f
+    sudo docker buildx    prune #-f
   fi
 }
 
