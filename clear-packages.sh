@@ -16,15 +16,15 @@ execute() {
   fi
 
   if command -v dnf ; then
-    sudo dnf autoremove
+    sudo dnf autoremove -y
     sudo dnf --verbose clean dbcache all
   fi
 
   if command -v docker ; then
-    sudo docker container prune #-f
-    sudo docker image     prune #-f
-    sudo docker volume    prune #-f
-    sudo docker buildx    prune #-f
+    sudo docker container prune --force
+    sudo docker image     prune --force
+    sudo docker volume    prune --force
+    sudo docker buildx    prune --force
   fi
 }
 
