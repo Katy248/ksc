@@ -16,6 +16,7 @@ execute() {
   fi
 
   if command -v dnf ; then
+    sudo dnf autoremove
     sudo dnf --verbose clean dbcache all
   fi
 
