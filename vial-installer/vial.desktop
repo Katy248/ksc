@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Exec=/usr/bin/vial
+Icon=/usr/local/share/vial/icon.ico
+Name=Vial
+Categories=Settings;HardwareSettings
