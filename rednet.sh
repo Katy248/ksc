@@ -2,9 +2,13 @@
 
 print_help() {
   echo "Usage:"
-  echo "    rednet.sh <adapter-name>"
-  echo "    rednet.sh adapters"
-  echo "    rednet.sh help" 
+  echo "  rednet.sh {<adapter-name>|command} [options]"
+  echo "  rednet.sh <adapter-name>"
+  echo "  rednet.sh adapters"
+  echo "Commands:"
+  echo "  adapters  Print all available adapters"
+  echo "Options:"
+  echo "  --help    Shows help message"
   exit 0
 }
 
@@ -19,7 +23,7 @@ if [[ $# -lt 1 ]]; then
   exit 1
 fi
 
-if [[ $1 == "help" ]]; then 
+if [[ $1 == "help" || $1 == "--help" ]]; then 
   print_help
 fi
 
