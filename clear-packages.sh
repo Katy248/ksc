@@ -24,7 +24,6 @@ execute() {
     sudo docker container prune --force
     sudo docker image     prune --force
     sudo docker volume    prune --force
-    sudo docker buildx    prune --force
   fi
 }
 
