@@ -2,8 +2,8 @@
 
 export GUM_THEME="gruvbox"
 gum format \
-  "Remove \`kms\` from HOOKS in file \`/etc/mkinitcpio.conf\` and then rerun script" \
-  "Othervise press \`Enter\`"
+  "Remove \`kms\` from HOOKS in file \`/etc/mkinitcpio.conf\`" \
+  "This script will try to open this file with current editor '$EDITOR'"
 
 if gum confirm "Continue?" ; then
   gum format "_Cool!_"
@@ -11,6 +11,8 @@ else
   gum format "_See you!_"
   exit 1
 fi
+
+sudo $EDITOR /etc/mkinitcpio.conf
 
 
 gum format \
