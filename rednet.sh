@@ -16,10 +16,28 @@ print_adapters() {
   nmcli --fields NAME --terse connection show
 }
 
+# Prints MAC address into sdtout
+# $1 - connection 
+get_mac() {
+  local connection=$1
+  cat /sys/class/net/"${connection}"/address
+}
+
+# $1 - MAC address
+print_manufacturer() {
+  local mac=$1
+  local mac_info
+  local company
+  mac_info=$(curl https://api.maclookup.app/v2/macs/${mac} -s)
+  company=$(echo "${mac_info}" | jq -r ".company")
+
+  echo "Manufacturer: ${company}"
+}
+
 if [[ $# -lt 1 ]]; then
   echo "Network adapter not specified" >&2
-  echo "You can use following adapters:"
-  print_adapters
+  echo "You can use following adapters:" >&2
+  print_adapters >&2
   exit 1
 fi
 
@@ -32,12 +50,15 @@ if [[ $1 == "adapters" ]]; then
   exit 0
 fi
 
-connection=$1
+CONNECTION=$1
 
-echo "Network settings for ${connection}:"
+echo "Network settings for ${CONNECTION}:"
 
-nmcli connection show "${connection}" | grep -e connection.id -e IP4
+nmcli connection show "${CONNECTION}" | grep -e connection.id -e IP4
 
 echo "Hostname: $(hostnamectl hostname)"
 
-echo "MAC: $(cat /sys/class/net/"${connection}"/address)"
+MAC=$(get_mac "${CONNECTION}")
+
+echo "MAC: ${MAC}"
+print_manufacturer "${MAC}"
