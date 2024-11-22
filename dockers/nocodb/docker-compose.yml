@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+    nocodb:
+        image: nocodb/nocodb:latest
+        ports:
+            - 8080:8080
+        volumes:
+            - /var/lib/nocodb:/usr/app/data/
