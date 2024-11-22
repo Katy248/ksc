@@ -1,0 +1,23 @@
+version: "2.29"
+name: Navidrome container
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    ports:
+      - "4533:4533"
+    restart: unless-stopped
+    env_file:
+        - path: ./.env
+          required: true
+    environment:
+      ND_SCANSCHEDULE: 0.12h
+      ND_LOGLEVEL: info
+      ND_SESSIONTIMEOUT: 24h
+      ND_BASEURL: ""
+      ND_LASTFM_LANGUAGE: ru
+      ND_LASTFM_ENABLED: true
+      ND_ENABLEGRAVATAR: true
+      ND_DEFAULTLANGUAGE: ru
+    volumes:
+      - "/var/navidrome/data/:/data"
+      - "/home/katy/Music/Shared/:/music:ro"
