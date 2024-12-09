@@ -1,38 +1,49 @@
 #!/bin/bash
 
 execute() {
-  if command -v nix-env ; then
-    gum log --level info "Clearing home-manager generations older than 2 days"
-    home-manager expire-generations -2days
-    gum log --level info "Clearing nix generations older than 2 days"
-    nix-env --delete-generations 2d
-    gum log --level info "Collecting garbage in nix"
-    nix-store --gc
+
+  gum log --level info "Starting packages clearing"
+
+  if [ $(command -v nix-env) ]; then
+    gum spin --title "Clearing home-manager generations older than 2 days" -- \
+      home-manager expire-generations -2days
+    gum spin --title "Clearing nix generations older than 2 days" -- \
+      nix-env --delete-generations 2d
+    gum spin --title "Collecting garbage in nix" -- \
+      nix-store --gc
   fi
 
-  if command -v pacman ; then
-    gum log --level info "Clearing pacman orphanes"
-    pacman -Qqttd | pkexec pacman -Rsu --noconfirm - 
+  if [ $(command -v pacman) ]; then
+    gum log --level info "Pacman found"
+    gum log --level warn "Sudo will be used"
+    gum spin --title "Clearing pacman orphanes" -- \
+      "pacman -Qqttd | sudo pacman -Rsu --noconfirm -"
   fi
 
-  if command -v flatpak ; then
-    gum log --level info "Clearing unused flatpaks"
-    flatpak uninstall --unused -y
+  if [ $(command -v flatpak) ]; then
+    gum spin --title "Clearing unused flatpaks" -- \
+      flatpak uninstall --unused -y
   fi
 
-  if command -v dnf ; then
-    gum log --level info "Clearing dnf packages" 
-    pkexec dnf autoremove -y
-    gum log --level info "Clearing dnf cache" 
-    pkexec dnf --verbose clean dbcache all
+  if [ $(command -v dnf) ]; then
+    gum spin --title "Clearing dnf packages" -- \
+      pkexec dnf autoremove -y
+    gum spin --title "Clearing dnf cache" -- \
+      pkexec dnf --verbose clean dbcache all
   fi
 
-  if command -v docker ; then
-    gum log --level info "Clearing docker"
-    sudo docker container prune --force
-    sudo docker image     prune --force
-    sudo docker volume    prune --force
+  if [ $(command -v docker) ]; then
+    gum log --level info "Docker found"
+    gum log --level warn "Sudo will be used"
+    gum spin --title "Clearing docker containers" -- \
+      sudo docker container prune --force
+    gum spin --title "Clearing docker images" -- \
+      sudo docker image prune --force
+    gum spin --title "Clearing docker volumes" -- \
+      sudo docker volume prune --force
   fi
+
+  gum log --level info "packages clearing done"
 }
 
 execute
