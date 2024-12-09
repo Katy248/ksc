@@ -46,4 +46,10 @@ execute() {
   gum log --level info "packages clearing done"
 }
 
+if [[ $USER != "root" ]]; then
+  gum format "This script should be run only as root, so you should use \`sudo $0\` or \`pkexec $0\`
+  > Sit down punk..."
+  exit 1
+fi
+
 execute
