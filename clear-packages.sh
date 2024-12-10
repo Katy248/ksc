@@ -5,10 +5,10 @@ execute() {
   gum log --level info "Starting packages clearing"
 
   if [ $(command -v nix-env) ]; then
-    gum spin --title "Clearing home-manager generations older than 2 days" -- \
-      home-manager expire-generations -2days
-    gum spin --title "Clearing nix generations older than 2 days" -- \
-      nix-env --delete-generations 2d
+    gum spin --title "Clearing home-manager generations older than 0 min" -- \
+      home-manager expire-generations -0min
+    gum spin --title "Clearing nix generations" -- \
+      nix-env --delete-generations +1
     gum spin --title "Collecting garbage in nix" -- \
       nix-store --gc
   fi
