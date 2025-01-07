@@ -2,13 +2,35 @@
 
 export GUM_SPIN_SHOW_ERROR=true
 export GUM_SPIN_ALIGN="right"
+export GUM_LOG_LEVEL_FOREGROUND="#b8bb26"
+export GUM_LOG_KEY_FOREGROUND="#928374"
+export GUM_LOG_VALUE_FOREGROUND="#fbf1c7"
+
+program_exist() {
+  local program=$1
+  if [ $(command -v "${program}") ]; then
+    gum log \
+      --level.foreground "#83a598" \
+      --structured \
+      --level debug \
+      "${program} found" exec "'$(which ${program})'"
+    return 0
+  fi
+  return 1
+}
+
+print_sudo_warn() {
+  gum log \
+    --level warn \
+    --level.foreground "#fabd2f" \
+    "Sudo will be used"
+}
 
 execute() {
 
   gum log --level info "Starting packages clearing"
 
-  if [ $(command -v nix-env) ]; then
-    gum log --level debug "Nix found"
+  if $(program_exist nix-env); then
     gum spin --title "Clearing home-manager generations older than 0 min" -- \
       home-manager expire-generations -0min
     gum spin --title "Clearing nix generations" -- \
@@ -18,23 +40,36 @@ execute() {
     gum log --level info "Nix packages cleared"
   fi
 
-  if [ $(command -v pacman) ]; then
-    gum log --level debug "Pacman found"
-    gum log --level warn "Sudo will be used"
-    gum spin --title "Clearing pacman orphanes" -- \
-      "pacman -Qqttd | sudo pacman -Rsu --noconfirm -"
+  if $(program_exist pacman); then
+
+    local pacman_exec
+    pacman_exec='pacman'
+
+    if $(program_exist yay); then
+      pacman_exec='yay'
+    fi
+    if $(program_exist paru); then
+      pacman_exec='paru'
+    fi
+
+    gum log --level info "Executable for pacman: '$(which ${pacman_exec})'"
+
+    print_sudo_warn
+
+    gum spin \
+      --title "Clearing pacman orphanes" \
+      --show-output \
+      -- "${pacman_exec} -Qqttd | sudo ${pacman_exec} -Rsu --noconfirm -"
     gum log --level info "Pacman orphanes cleared"
   fi
 
-  if [ $(command -v flatpak) ]; then
-    gum log --level debug "Flatpak found"
+  if $(program_exist flatpak); then
     gum spin --title "Clearing unused flatpaks" -- \
       flatpak uninstall --unused -y
     gum log --level info "Flatpak packages cleared"
   fi
 
-  if [ $(command -v dnf) ]; then
-    gum log --level debug "Dnf found"
+  if $(program_exist dnf); then
     gum spin --title "Clearing dnf packages" -- \
       pkexec dnf autoremove -y
     gum spin --title "Clearing dnf cache" -- \
@@ -42,8 +77,7 @@ execute() {
     gum log --level info "Dnf unused packages and cache cleared"
   fi
 
-  if [ $(command -v docker) ]; then
-    gum log --level debug "Docker found"
+  if $(program_exist docker); then
     # gum log --level warn "Sudo will be used"
     gum spin --title "Clearing docker containers, images, volumes" -- \
       "
