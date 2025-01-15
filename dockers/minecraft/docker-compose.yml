@@ -11,6 +11,7 @@ services:
       DUMP_SERVER_PROPERTIES: "TRUE"
       MODS: "https://modrinth.com/mod/xaeros-minimap"
       MODRINTH_DOWNLOAD_DEPENDENCIES: "required"
+      ONLINE_MODE: false
     volumes:
       # attach the relative directory 'data' to the container's /data path
       - ./data:/data
