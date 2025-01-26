@@ -6,6 +6,9 @@ export GUM_LOG_LEVEL_FOREGROUND="#b8bb26"
 export GUM_LOG_KEY_FOREGROUND="#928374"
 export GUM_LOG_VALUE_FOREGROUND="#fbf1c7"
 
+TRUE=0
+FALSE=1
+
 program_exist() {
   local program=$1
   if [ $(command -v "${program}") ]; then
@@ -14,9 +17,9 @@ program_exist() {
       --structured \
       --level debug \
       "${program} found" exec "'$(which ${program})'"
-    return 0
+    return $TRUE
   fi
-  return 1
+  return $FALSE
 }
 
 print_sudo_warn() {
