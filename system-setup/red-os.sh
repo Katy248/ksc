@@ -8,6 +8,7 @@ rpm_pkgs=(
     'neovim'
     'stow'
     'git'
+    'figlet'
 )
 
 disable_selinux
