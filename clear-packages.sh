@@ -73,6 +73,11 @@ execute() {
     gum log --level info "Flatpak packages cleared"
   fi
 
+  if $(program_exist uv); then
+    gum spin --title "Clearing uv cache" -- uv cache clean
+    gum log --level info "Cleared uv cache"
+  fi
+
   if $(program_exist docker); then
 
     gum spin --title "Clearing docker containers" -- pkexec docker container prune --force
