@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export GUM_SPIN_SHOW_ERROR=true
+export GUM_SPIN_SHOW_OUTPUT=true
 export GUM_SPIN_ALIGN="right"
 export GUM_LOG_LEVEL_FOREGROUND="#b8bb26"
 export GUM_LOG_KEY_FOREGROUND="#928374"
@@ -72,23 +73,28 @@ execute() {
     gum log --level info "Flatpak packages cleared"
   fi
 
+  if $(program_exist docker); then
+
+    gum spin --title "Clearing docker containers" -- pkexec docker container prune --force
+    gum spin --title "Clearing docker images" -- pkexec docker image prune --all --force
+    gum spin --title "Clearing docker volumes" -- pkexec docker volume prune --force
+    gum spin --title "Clearing docker builder cache" -- pkexec docker builder prune --force
+    gum spin --title "Clearing docker network" -- pkexec docker network prune --force
+    gum spin --title "Clearing docker system cache" -- pkexec docker system prune --force
+
+    if docker buildx version; then
+      gum spin --title "Clearing docker buildx cache" -- pkexec docker buildx prune --force
+    fi
+
+    gum log --level info "Docker images, containers, volumes cleared"
+  fi
+
   if $(program_exist dnf); then
     gum spin --title "Clearing dnf packages" -- \
       pkexec dnf autoremove -y
     gum spin --title "Clearing dnf cache" -- \
       pkexec dnf --verbose clean dbcache all
     gum log --level info "Dnf unused packages and cache cleared"
-  fi
-
-  if $(program_exist docker); then
-    # gum log --level warn "Sudo will be used"
-    gum spin --title "Clearing docker containers, images, volumes" -- \
-      "
-      pkexec docker container prune --force
-      pkexec docker image prune --force
-      pkexec docker volume prune --force
-      "
-    gum log --level info "Docker images, containers, volumes cleared"
   fi
 
   gum log --level info "Packages clearing done"
