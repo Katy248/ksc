@@ -77,13 +77,12 @@ execute() {
 
     gum spin --title "Clearing docker containers" -- pkexec docker container prune --force
     gum spin --title "Clearing docker images" -- pkexec docker image prune --all --force
-    gum spin --title "Clearing docker volumes" -- pkexec docker volume prune --force
-    gum spin --title "Clearing docker builder cache" -- pkexec docker builder prune --force
+    gum spin --title "Clearing docker volumes" -- pkexec docker volume prune --all --force
     gum spin --title "Clearing docker network" -- pkexec docker network prune --force
-    gum spin --title "Clearing docker system cache" -- pkexec docker system prune --force
+    gum spin --title "Clearing docker system cache" -- pkexec docker system prune --all --force
 
     if docker buildx version; then
-      gum spin --title "Clearing docker buildx cache" -- pkexec docker buildx prune --force
+      gum spin --title "Clearing docker buildx cache" -- pkexec docker buildx prune --all --force
     fi
 
     gum log --level info "Docker images, containers, volumes cleared"
