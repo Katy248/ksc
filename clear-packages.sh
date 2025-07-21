@@ -78,6 +78,11 @@ execute() {
     gum log --level info "Cleared uv cache"
   fi
 
+  if $(program_exist dotnet); then
+    gum spin --title "Clearing nuget cache" -- dotnet nuget locals all --clear
+    gum log --level info "Nuget cache cleared"
+  fi
+
   if $(program_exist docker); then
 
     gum spin --title "Clearing docker containers" -- pkexec docker container prune --force
