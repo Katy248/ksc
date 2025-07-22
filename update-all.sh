@@ -21,7 +21,9 @@ print_sudo_warn() {
 }
 
 execute() {
-  if program_exist pacman; then
+  if program_exist paru; then
+    paru -Syu --noconfirm
+  elif program_exist pacman; then
     print_sudo_warn
     sudo pacman -Syu --noconfirm
   fi
