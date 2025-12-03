@@ -12,12 +12,12 @@ FALSE=1
 
 program_exist() {
   local program=$1
-  if [ $(command -v "${program}") ]; then
+  if command -v "${program}"; then
     gum log \
       --level.foreground "#83a598" \
       --structured \
       --level debug \
-      "${program} found" exec "'$(which ${program})'"
+      "${program} found" exec "'$(which "${program}")'"
     return $TRUE
   fi
   return $FALSE
@@ -34,7 +34,7 @@ execute() {
 
   gum log --level info "Starting packages clearing"
 
-  if $(program_exist nix-env); then
+  if program_exist nix-env; then
     gum spin --title "Clearing home-manager generations older than 0 min" -- \
       home-manager expire-generations -0min
     gum spin --title "Clearing nix generations" -- \
@@ -44,15 +44,15 @@ execute() {
     gum log --level info "Nix packages cleared"
   fi
 
-  if $(program_exist pacman); then
+  if program_exist pacman; then
 
     local pacman_exec
     pacman_exec='pacman'
 
-    if $(program_exist yay); then
+    if program_exist yay; then
       pacman_exec='yay'
     fi
-    if $(program_exist paru); then
+    if program_exist paru; then
       pacman_exec='paru'
     fi
 
@@ -67,23 +67,23 @@ execute() {
     gum log --level info "Pacman orphanes cleared"
   fi
 
-  if $(program_exist flatpak); then
+  if program_exist flatpak; then
     gum spin --title "Clearing unused flatpaks" -- \
       flatpak uninstall --unused -y
     gum log --level info "Flatpak packages cleared"
   fi
 
-  if $(program_exist uv); then
+  if program_exist uv; then
     gum spin --title "Clearing uv cache" -- uv cache clean
     gum log --level info "Cleared uv cache"
   fi
 
-  if $(program_exist dotnet); then
+  if program_exist dotnet; then
     gum spin --title "Clearing nuget cache" -- dotnet nuget locals all --clear
     gum log --level info "Nuget cache cleared"
   fi
 
-  if $(program_exist docker); then
+  if program_exist docker; then
 
     gum spin --title "Clearing docker containers" -- pkexec docker container prune --force
     gum spin --title "Clearing docker images" -- pkexec docker image prune --all --force
@@ -98,7 +98,7 @@ execute() {
     gum log --level info "Docker images, containers, volumes cleared"
   fi
 
-  if $(program_exist dnf); then
+  if program_exist dnf; then
     gum spin --title "Clearing dnf packages" -- \
       pkexec dnf autoremove -y
     gum spin --title "Clearing dnf cache" -- \
