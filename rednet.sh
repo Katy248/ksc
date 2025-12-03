@@ -1,5 +1,7 @@
 #!/bin/bash
 
+VERSION=2.0
+
 print_help() {
   echo "Usage:"
   echo "  rednet.sh {<adapter-name>|command} [options]"
@@ -8,7 +10,10 @@ print_help() {
   echo "Commands:"
   echo "  adapters  Print all available adapters"
   echo "Options:"
-  echo "  --help    Shows help message"
+  echo "  -s  --stdin   Uses stdin as input parameter"
+  echo "  -h  --help    Shows help message"
+  echo
+  echo "Version: $VERSION"
   exit 0
 }
 
@@ -17,7 +22,7 @@ print_adapters() {
 }
 
 # Prints MAC address into sdtout
-# $1 - connection 
+# $1 - connection
 get_mac() {
   local connection=$1
   cat /sys/class/net/"${connection}"/address
@@ -41,16 +46,21 @@ if [[ $# -lt 1 ]]; then
   exit 1
 fi
 
-if [[ $1 == "help" || $1 == "--help" ]]; then 
+if [[ $1 == "help" || $1 == "--help" || $1 == "-h" ]]; then
   print_help
 fi
 
-if [[ $1 == "adapters" ]]; then 
+if [[ $1 == "adapters" ]]; then
   print_adapters
   exit 0
 fi
 
 CONNECTION=$1
+
+if [[ $1 == "--stdin" || $1 == "-s" ]]; then
+  read -r stdin
+  CONNECTION=$stdin
+fi
 
 echo "Network settings for ${CONNECTION}:"
 
