@@ -51,6 +51,14 @@ execute() {
     flatpak upgrade --force-remove --appstream -y
     flatpak upgrade --force-remove -y
   fi
+
+  if program_exist home-manager; then
+    HOME_MANAGER_CONFIG_DIR=~/.config/home-manager
+    FEATURES_FLAGS='--extra-experimental-features nix-command --extra-experimental-features flakes'
+
+    cd ${HOME_MANAGER_CONFIG_DIR} && nix flake update ${FEATURES_FLAGS}
+    cd ${HOME_MANAGER_CONFIG_DIR} && NIXPKGS_ALLOW_UNFREE=1 home-manager switch ${FEATURES_FLAGS}
+  fi
 }
 
 execute
