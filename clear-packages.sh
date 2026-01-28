@@ -34,6 +34,11 @@ execute() {
 
   gum log --level info "Starting packages clearing"
 
+  if program_exist snap; then
+    gum spin --title "Clearing disabled snap packages" -- \
+      pkexec ./clean_snap.sh
+  fi
+
   if program_exist nix-env; then
     gum spin --title "Clearing home-manager generations older than 0 min" -- \
       home-manager expire-generations -0min
@@ -105,6 +110,7 @@ execute() {
       pkexec dnf --verbose clean dbcache all
     gum log --level info "Dnf unused packages and cache cleared"
   fi
+
 
   gum log --level info "Packages clearing done"
 }
