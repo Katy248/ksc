@@ -34,6 +34,11 @@ execute() {
 
   gum log --level info "Starting packages clearing"
 
+  if program_exist npm; then
+    gum spin --title "Clearing npm cache" -- \
+      npm cache clean --force
+  fi
+
   if program_exist snap; then
     gum spin --title "Clearing disabled snap packages" -- \
       pkexec ./clean_snap.sh
