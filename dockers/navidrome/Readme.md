@@ -4,6 +4,8 @@
 
 Service won't start without `.env` file in this folder
 
+Create API Key (<https://www.last.fm/api/account/create>)
+
 Copy `.env.example` to `.env` and fill it with valid data from <https://www.last.fm/api/accounts> page
 
 ```bash
