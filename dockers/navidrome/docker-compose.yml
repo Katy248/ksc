@@ -12,11 +12,18 @@ services:
       ND_SCANSCHEDULE: 0.12h
       ND_LOGLEVEL: info
       ND_SESSIONTIMEOUT: 24h
+      ND_ENABLESHARING: true
+      ND_ENABLESTARRATING: false
       # ND_BASEURL: "navidrome.katy248.ru"
-      ND_LASTFM_LANGUAGE: ru
-      ND_LASTFM_ENABLED: true
       ND_ENABLEGRAVATAR: true
       ND_DEFAULTLANGUAGE: ru
+      ND_SCANNER_GENRESEPARATORS: ";/,&"
+      ND_UIWELCOMEMESSAGE: "Зайдите в систему по данным учётной записи, которую вам предоставил администратор (Антон)."
+      # Last.fm
+      ND_LASTFM_LANGUAGE: ru
+      ND_LASTFM_ENABLED: true
+      ND_LASTFM_APIKEY: "${LASTFM_APIKEY}"
+      ND_LASTFM_SECRET: "${LASTFM_SECRET}"
     volumes:
       - "/var/navidrome/data/:/data"
       - "/home/katy/Music/Shared/:/music:ro"
