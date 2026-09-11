@@ -1,0 +1,16 @@
+services:
+  server:
+    image: ${FUTO_NOTES_IMAGE:-futotech/notes-server:stable}
+    restart: unless-stopped
+    environment:
+      PORT: "3000"
+      AUTH_MODE: password
+      FUTO_NOTES_PASSWORD: ${FUTO_NOTES_PASSWORD:-}
+      FUTO_NOTES_PASSWORD_HASH: ${FUTO_NOTES_PASSWORD_HASH:-}
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      BLOB_DIR: /data/blobs
+      BLOB_GC_ENABLED: ${BLOB_GC_ENABLED:-true}
+    ports:
+      - "${FUTO_NOTES_PORT:-3005}:3000"
+    volumes:
+      - ${FUTO_NOTES_DATA_DIR:-./futo-notes-data}:/data
