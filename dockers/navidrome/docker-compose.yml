@@ -27,6 +27,11 @@ services:
       ND_LASTFM_ENABLED: true
       ND_LASTFM_APIKEY: "${LASTFM_APIKEY}"
       ND_LASTFM_SECRET: "${LASTFM_SECRET}"
+      # Plugins
+      ND_PLUGINS_ENABLED: true
+      ND_PLUGINS_FOLDER: "/plugins"
+      ND_PLUGINS_AUTORELOAD: true
     volumes:
       - "/var/navidrome/data/:/data"
       - "/home/katy/Music/Shared/:/music:ro"
+      - "${PLUGINS_DIR}:/plugins"
