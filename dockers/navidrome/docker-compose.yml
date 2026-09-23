@@ -1,13 +1,16 @@
 name: Navidrome compose
 services:
   navidrome:
-    image: deluan/navidrome:0.63.2
+    image: deluan/navidrome:latest
     ports:
       - "4533:4533"
     restart: unless-stopped
     env_file:
       - path: ./.env
         required: true
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
     environment:
       ND_SCANSCHEDULE: 0.12h
       ND_LOGLEVEL: info
