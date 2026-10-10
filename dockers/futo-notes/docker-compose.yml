@@ -6,10 +6,10 @@ services:
       PORT: "3000"
       AUTH_MODE: password
       FUTO_NOTES_PASSWORD: ${FUTO_NOTES_PASSWORD:-}
-      FUTO_NOTES_PASSWORD_HASH: ${FUTO_NOTES_PASSWORD_HASH:-}
       COOKIE_SECURE: ${COOKIE_SECURE:-true}
       BLOB_DIR: /data/blobs
       BLOB_GC_ENABLED: ${BLOB_GC_ENABLED:-true}
+      DEV_UI: false
     ports:
       - "${FUTO_NOTES_PORT:-3005}:3000"
     volumes:

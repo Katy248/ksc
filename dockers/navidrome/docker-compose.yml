@@ -33,5 +33,5 @@ services:
       ND_PLUGINS_AUTORELOAD: true
     volumes:
       - "/var/navidrome/data/:/data"
-      - "/home/katy/Music/Shared/:/music:ro"
+      - "${MUSIC_DIR}:/music:ro"
       - "${PLUGINS_DIR}:/plugins"
